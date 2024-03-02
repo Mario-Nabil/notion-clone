@@ -15,7 +15,7 @@ import { useUser } from "@clerk/clerk-react";
 
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-// import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import {
   DropdownMenu,
@@ -53,19 +53,18 @@ export const Item = ({
   const { user } = useUser();
   const router = useRouter();
   const create = useMutation(api.documents.create);
-  //   const archive = useMutation(api.documents.archive);
+  const archive = useMutation(api.documents.archive);
 
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     if (!id) return;
-    // const promise = archive({ id })
-    //   .then(() => router.push("/documents"))
+    const promise = archive({ id }).then(() => router.push("/documents"));
 
-    // toast.promise(promise, {
-    //   loading: "Moving to trash...",
-    //   success: "Note moved to trash!",
-    //   error: "Failed to archive note."
-    // });
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive note.",
+    });
   };
 
   const handleExpand = (
@@ -78,20 +77,20 @@ export const Item = ({
   const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     if (!id) return;
-    // const promise = create({ title: "Untitled", parentDocument: id }).then(
-    //   (documentId) => {
-    //     if (!expanded) {
-    //       onExpand?.();
-    //     }
-    //     router.push(`/documents/${documentId}`);
-    //   }
-    // );
+    const promise = create({ title: "Untitled", parentDocument: id }).then(
+      (documentId) => {
+        if (!expanded) {
+          onExpand?.();
+        }
+        // router.push(`/documents/${documentId}`);
+      }
+    );
 
-    // toast.promise(promise, {
-    //   loading: "Creating a new note...",
-    //   success: "New note created!",
-    //   error: "Failed to create a new note.",
-    // });
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Failed to create a new note.",
+    });
   };
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
@@ -157,7 +156,7 @@ export const Item = ({
           </DropdownMenu>
           <div
             role="button"
-            // onClick={onCreate}
+            onClick={onCreate}
             className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
           >
             <Plus className="h-4 w-4 text-muted-foreground" />
@@ -176,8 +175,8 @@ Item.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
       }}
       className="flex gap-x-2 py-[3px]"
     >
-      {/* <Skeleton className="h-4 w-4" />
-      <Skeleton className="h-4 w-[30%]" /> */}
+      <Skeleton className="h-4 w-4" />
+      <Skeleton className="h-4 w-[30%]" />
     </div>
   );
 };
