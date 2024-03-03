@@ -1,9 +1,8 @@
-const path = require("path");
-
-module.exports = {
-  reactStrictMode: true,
-  webpack: (config) => {
-    config.resolve.alias["@/hooks"] = path.join(__dirname, "hooks");
-    return config;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ["files.edgestore.dev"],
   },
 };
+
+module.exports = nextConfig;
